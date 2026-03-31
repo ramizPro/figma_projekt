@@ -90,10 +90,8 @@ export default function LoginPage() {
           >
             Login
           </button>
-
         </div>
       </div>
-
     </div>
   );
 }

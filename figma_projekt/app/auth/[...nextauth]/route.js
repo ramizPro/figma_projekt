@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { client } from "@/lib/sanity";
 
 const handler = NextAuth({
   providers: [
@@ -10,18 +11,31 @@ const handler = NextAuth({
         password: {},
       },
       async authorize(credentials) {
-        if (
-          credentials.email === "test@test.com" &&
-          credentials.password === "123456"
-        ) {
-          return { id: 1, email: "test@test.com" };
+        const user = await client.fetch(
+          `*[_type == "user" && email == $email][0]`,
+          { email: credentials.email }
+        );
+
+        if (!user) return null;
+
+        if (user.password === credentials.password) {
+          return {
+            id: user._id,
+            email: user.email,
+          };
         }
+
         return null;
       },
     }),
   ],
+
   pages: {
     signIn: "/auth/login",
+  },
+
+  session: {
+    strategy: "jwt",
   },
 });
 
