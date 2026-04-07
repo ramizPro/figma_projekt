@@ -19,7 +19,7 @@ export default function LoginPage() {
     if (res?.error) {
       alert("Invalid credentials");
     } else {
-      window.location.href = "/";
+      window.location.href = "/mainPage";
     }
   };
 
@@ -48,7 +48,7 @@ export default function LoginPage() {
             href="/"
             className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition"
           >
-            Nazaj
+            Back
           </Link>
 
           <Link
