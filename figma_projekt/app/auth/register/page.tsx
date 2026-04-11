@@ -1,5 +1,4 @@
 'use client';
-
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -10,21 +9,27 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
 
   const handleRegister = async () => {
+  try {
     const res = await fetch("/api/register", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ email, password }),
     });
 
     const data = await res.json();
 
-    if (data.error) {
-      alert(data.error);
-    } else {
-      alert("User created!");
-      window.location.href = "/auth/login";
+    if (!res.ok) {
+      throw new Error(data.error || "Something went wrong");
     }
-  };
 
+    alert("User created!");
+    window.location.href = "/auth/login";
+  } catch (err) {
+    alert(err instanceof Error ? err.message : "An error occurred");
+  }
+};
   return (
     <div className="relative w-full h-screen">
 
