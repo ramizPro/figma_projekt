@@ -10,19 +10,23 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    const res = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+  if (!email || !password) {
+    alert("Fill all fields");
+    return;
+  }
 
-    if (res?.error) {
-      alert("Invalid credentials");
-    } else {
-      window.location.href = "/mainPage";
-    }
-  };
+  const res = await signIn("credentials", {
+    email,
+    password,
+    redirect: false,
+  });
 
+  if (res?.error) {
+    alert("Invalid credentials");
+  } else {
+    window.location.href = "/mainPage";
+  }
+};
   return (
     <div className="relative w-full h-screen">
 

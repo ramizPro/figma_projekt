@@ -1,3 +1,6 @@
+import { client } from "@/lib/sanity";
+import bcrypt from "bcryptjs";
+
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
@@ -6,12 +9,28 @@ export async function POST(req: Request) {
       return Response.json({ error: "Missing fields" }, { status: 400 });
     }
 
-    // For now (no DB yet)
-    console.log("User:", email, password);
+    const existingUser = await client.fetch(
+      `*[_type == "user" && email == $email][0]`,
+      { email }
+    );
+
+    if (existingUser) {
+      return Response.json({ error: "User already exists" }, { status: 400 });
+    }
+
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await client.create({
+      _type: "user",
+      email,
+      password: hashedPassword,
+    });
 
     return Response.json({ message: "User created" });
 
   } catch (err) {
+    console.error(err);
     return Response.json({ error: "Server error" }, { status: 500 });
   }
 }

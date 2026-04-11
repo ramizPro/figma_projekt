@@ -1,5 +1,4 @@
-import { type SchemaTypeDefinition } from 'sanity'
+import user from "./user";
+import task from "./task";
 
-export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [],
-}
+export const schemaTypes = [user, task];

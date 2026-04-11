@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { signOut } from "next-auth/react";
 
 export default function MainPage() {
   const [open, setOpen] = useState(false);
@@ -36,8 +37,10 @@ export default function MainPage() {
         </motion.h1>
 
         <div className="flex gap-4">
-          <button className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-red-700 text-white transition">
-            <a href="/">Log-out</a>
+          <button
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-red-700 text-white transition">
+              Log-out
           </button>
         </div>
       </div>
@@ -49,8 +52,6 @@ export default function MainPage() {
 
           {/* LEFT */}
           <div className="space-y-6">
-
-            {/* ✅ FIXED BUTTON */}
             <div
               onClick={() => setOpen(true)}
               className="inline-block bg-blue-500/40 backdrop-blur-md px-4 py-2 rounded-xl cursor-pointer hover:bg-blue-500/60 transition"
@@ -87,7 +88,7 @@ export default function MainPage() {
         </div>
       </div>
 
-      {/* ✅ MODAL (MERGED HERE) */}
+
       {open && (
         <div className="absolute inset-0 z-30 flex items-center justify-center">
 
