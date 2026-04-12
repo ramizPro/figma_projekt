@@ -23,9 +23,7 @@ export default function RegisterPage() {
     if (!res.ok) {
       throw new Error(data.error || "Something went wrong");
     }
-
-    alert("User created!");
-    window.location.href = "/auth/login";
+    window.location.href = "/api/auth/login";
   } catch (err) {
     alert(err instanceof Error ? err.message : "An error occurred");
   }
@@ -54,7 +52,7 @@ export default function RegisterPage() {
             Back
           </Link>
 
-          <Link href="/auth/login" className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition">
+          <Link href="/api/auth/login" className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition">
             Login
           </Link>
         </div>

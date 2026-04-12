@@ -1,5 +1,6 @@
 import { client } from "@/lib/sanity";
 import bcrypt from "bcryptjs";
+import { getServerSession } from "next-auth/next";
 
 export async function POST(req: Request) {
   try {
