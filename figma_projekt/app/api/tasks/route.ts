@@ -2,7 +2,7 @@ import { client } from "@/lib/sanity";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]/route";
 
-// 🔹 GET TASKS
+
 export async function GET() {
   try {
     const session: any = await getServerSession(authOptions);
@@ -23,7 +23,6 @@ export async function GET() {
   }
 }
 
-// 🔹 CREATE TASK
 export async function POST(req: Request) {
   try {
     const session: any = await getServerSession(authOptions);
@@ -51,7 +50,6 @@ export async function POST(req: Request) {
   }
 }
 
-// 🔹 UPDATE TASK
 export async function PATCH(req: Request) {
   try {
     const session: any = await getServerSession(authOptions);
@@ -80,7 +78,6 @@ export async function PATCH(req: Request) {
   }
 }
 
-// 🔹 DELETE TASK
 export async function DELETE(req: Request) {
   try {
     const session: any = await getServerSession(authOptions);

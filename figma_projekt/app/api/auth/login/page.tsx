@@ -15,6 +15,11 @@ export default function LoginPage() {
     return;
   }
 
+  if (!email.includes("@")) {
+    alert("Invalid email format");
+    return;
+  }
+
   const res = await signIn("credentials", {
     email,
     password,
@@ -22,7 +27,7 @@ export default function LoginPage() {
   });
 
   if (res?.error) {
-    alert("Invalid credentials");
+    alert("Wrong email or password");
   } else {
     window.location.href = "/mainPage";
   }
