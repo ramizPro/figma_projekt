@@ -61,7 +61,7 @@ export default function LoginPage() {
           </Link>
 
           <Link
-            href="/api/auth/register"
+            href="/auth/register"
             className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition"
           >
             Register
