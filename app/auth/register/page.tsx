@@ -46,7 +46,7 @@ export default function RegisterPage() {
 
       alert("Registration successful!");
       
-      router.push("/api/auth/login");
+      router.push("/auth/login");
 
     } catch (err) {
       alert(err instanceof Error ? err.message : "An error occurred");

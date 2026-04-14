@@ -17,7 +17,6 @@ export default function MainPage() {
   const [importance, setImportance] = useState("");
   const [dueDate, setDueDate] = useState("");
 
-  // 🔄 FETCH TASKS
   useEffect(() => {
     if (!session?.user?.id) return;
 
@@ -28,7 +27,24 @@ export default function MainPage() {
       .then(setTasks);
   }, [session]);
 
-  // ➕ ADD TASK
+  // 🎨 COLOR LOGIC
+  const getTaskColor = (task: any) => {
+    if (task.status === "finished") {
+      return "bg-green-500/30 border-green-400";
+    }
+
+    switch (task.importance) {
+      case "important":
+        return "bg-red-500/30 border-red-400";
+      case "normal":
+        return "bg-yellow-400/30 border-yellow-300";
+      case "nonUrgent":
+        return "bg-green-300/30 border-green-200";
+      default:
+        return "bg-white/20 border-white/10";
+    }
+  };
+
   const handleAddTask = async () => {
     const res = await fetch("/api/tasks", {
       method: "POST",
@@ -60,7 +76,6 @@ export default function MainPage() {
     setDueDate("");
   };
 
-  // ✏️ UPDATE
   const handleUpdateTask = async () => {
     await fetch("/api/tasks", {
       method: "PATCH",
@@ -92,51 +107,40 @@ export default function MainPage() {
   return (
     <div className="relative w-full h-screen overflow-hidden">
 
-      {/* Background */}
       <Image src="/slike/background.png" alt="bg" fill className="object-cover" />
       <div className="absolute inset-0 bg-black/50" />
 
       <div className="absolute top-0 left-0 w-full z-20 flex justify-between items-center px-8 py-4 bg-black/60 backdrop-blur-md border-b border-white/10">
 
-  {/* LEFT */}
-  <h1 className="text-xl font-semibold text-white">
-    TaskManager
-  </h1>
+        <h1 className="text-xl font-semibold text-white">
+          TaskManager
+        </h1>
 
-  {/* CENTER */}
-  <motion.h1
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="absolute left-1/2 transform -translate-x-1/2 text-lg font-semibold text-white"
-  >
-    To make your planning easier
-  </motion.h1>
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="absolute left-1/2 transform -translate-x-1/2 text-lg font-semibold text-white"
+        >
+          To make your planning easier
+        </motion.h1>
 
-  {/* RIGHT */}
-  <div className="flex items-center gap-4">
-    
-    <a
-      href="/profile"
-      className="text-white hover:underline"
-    >
-      My profile
-    </a>
+        <div className="flex items-center gap-4">
+          <a href="/profile" className="text-white hover:underline">
+            My profile
+          </a>
 
-    <button
-      onClick={() => signOut({ callbackUrl: "/" })}
-      className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-red-700 text-white transition"
-    >
-      Log-out
-    </button>
+          <button
+            onClick={() => signOut({ callbackUrl: "/" })}
+            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-red-700 text-white transition"
+          >
+            Log-out
+          </button>
+        </div>
 
-  </div>
+      </div>
 
-</div>
-
-      {/* CONTENT */}
       <div className="relative z-10 pt-28 px-6 text-white">
 
-        {/* Add button */}
         <div className="mb-6">
           <button
             onClick={() => setOpen(true)}
@@ -146,7 +150,6 @@ export default function MainPage() {
           </button>
         </div>
 
-        {/* BOARD */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
           {[
@@ -170,9 +173,9 @@ export default function MainPage() {
                     <div
                       key={task._id}
                       onClick={() => setEditTask(task)}
-                      className="p-3 rounded-xl bg-white/20 hover:bg-white/30 cursor-pointer"
+                      className={`p-3 rounded-xl cursor-pointer border transition ${getTaskColor(task)} hover:scale-[1.02]`}
                     >
-                      <div>{task.title}</div>
+                      <div className="font-semibold">{task.title}</div>
 
                       {task.description && (
                         <div className="text-xs opacity-70">
