@@ -211,9 +211,11 @@ export default function MainPage() {
               <option value="normal">Normal</option>
               <option value="nonUrgent">Non-urgent</option>
             </select>
-
-            <input type="date" onChange={e => setDueDate(e.target.value)} className="w-full mb-4 p-2 border rounded" />
-
+              <input 
+                type="datetime-local" 
+                onChange={e => setDueDate(e.target.value)} 
+                className="w-full mb-4 p-2 border rounded" 
+              />
             <button onClick={handleAddTask} className="w-full bg-black text-white p-2 rounded">
               Add
             </button>
