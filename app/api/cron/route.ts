@@ -3,24 +3,41 @@ import { sendReminderEmail } from "@/lib/email";
 
 export async function GET() {
   const now = new Date();
+  const oneDay = 24 * 60 * 60 * 1000;
 
-  const tasks = await client.fetch(`*[_type == "task"]`);
+  const tasks = await client.fetch(`
+    *[_type == "task" && status == "in progress" && defined(dueDate)]{
+      _id,
+      title,
+      description,
+      dueDate,
+      userId,
+      reminderSent
+    }
+  `);
 
   for (const task of tasks) {
     const due = new Date(task.dueDate);
     const diff = due.getTime() - now.getTime();
 
-    const oneDay = 24 * 60 * 60 * 1000;
-    const oneHour = 60 * 60 * 1000;
+    if (
+      !task.reminderSent &&
+      diff < oneDay &&
+      diff > oneDay - 60000
+    ) {
+      const user = await client.fetch(
+        `*[_type == "user" && _id == $id][0]{email}`,
+        { id: task.userId }
+      );
 
-    // 1 dan prej
-    if (diff > oneDay - 60000 && diff < oneDay + 60000) {
-      await sendReminderEmail("USER_EMAIL", task);
-    }
+      if (!user?.email) continue;
 
-    // 1 ura prej
-    if (diff > oneHour - 60000 && diff < oneHour + 60000) {
-      await sendReminderEmail("USER_EMAIL", task);
+      await sendReminderEmail(user.email, task);
+
+      await client
+        .patch(task._id)
+        .set({ reminderSent: true })
+        .commit();
     }
   }
 
