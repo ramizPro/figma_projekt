@@ -25,15 +25,43 @@ export default function ProfilePage() {
   }
 
   const handleUpdate = async () => {
-    alert("Za update rabiš API (trenutno samo UI dela)");
-  };
+    const res = await fetch("/api/profile", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username,
+      email,
+      password,
+    }),
+  });
+
+  const data = await res.json();
+
+  if (res.ok) {
+    alert("Updated!");
+  } else {
+    alert(data.error);
+  }
+};
 
   const handleDelete = async () => {
-    const confirmDelete = confirm("Are you sure?");
-    if (!confirmDelete) return;
+  const confirmDelete = confirm("Are you sure?");
+  if (!confirmDelete) return;
 
+  const res = await fetch("/api/profile", {
+    method: "DELETE",
+  });
+
+  const data = await res.json();
+
+  if (res.ok) {
     signOut({ callbackUrl: "/" });
-  };
+  } else {
+    alert(data.error);
+  }
+};
 
   return (
     <div className="relative w-full min-h-screen overflow-hidden">

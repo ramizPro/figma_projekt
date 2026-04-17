@@ -26,8 +26,6 @@ export default function MainPage() {
       .then(res => res.json())
       .then(setTasks);
   }, [session]);
-
-  // 🎨 COLOR LOGIC
   const getTaskColor = (task: any) => {
     if (task.status === "finished") {
       return "bg-green-500/30 border-green-400";
@@ -97,7 +95,7 @@ export default function MainPage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ _id: id }),
     });
 
     setTasks(tasks.filter(t => t._id !== id));
@@ -195,8 +193,6 @@ export default function MainPage() {
 
         </div>
       </div>
-
-      {/* ADD MODAL */}
       {open && (
         <div className="absolute inset-0 flex items-center justify-center z-30">
           <div className="absolute inset-0 bg-black/60" onClick={() => setOpen(false)} />
@@ -212,7 +208,7 @@ export default function MainPage() {
               <option value="nonUrgent">Non-urgent</option>
             </select>
               <input 
-                type="datetime-local" 
+                type="date" 
                 onChange={e => setDueDate(e.target.value)} 
                 className="w-full mb-4 p-2 border rounded" 
               />
@@ -222,8 +218,6 @@ export default function MainPage() {
           </div>
         </div>
       )}
-
-      {/* EDIT MODAL */}
       {editTask && (
         <div className="absolute inset-0 flex items-center justify-center z-30">
           <div className="absolute inset-0 bg-black/60" onClick={() => setEditTask(null)} />
